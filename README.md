@@ -96,6 +96,17 @@ Similar to above $\uparrow$, navigate to the place where you have the `main.py` 
 
 The program should automatically *source* the `yt_urls.txt` file and start to do its thing.
 
+>[!WARNING]
+>The contents of the text file `yt_urls.txt` should look something like this:
+>
+>```console
+>https://www.youtube.com/watch?v=dQw4w9WgXcQ
+>https://www.youtube.com/watch?v=R8vlNbk0Yww
+>https://www.youtube.com/watch?v=CzmXjvj4dik
+>```
+>
+>Even though I have a function to check for invalid YouTube links... *Why make the mistake in the first place*
+
 >[!NOTE]
 >After you press these options ( *for both... Audio and Video* ), you will have to enter more options.
 >
