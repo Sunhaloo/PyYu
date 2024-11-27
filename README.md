@@ -11,12 +11,12 @@
 This Python Program can be used in 2 main ways:
 
 1. Copy and Paste YouTube URLs **one by one**
-2. Place a combination of link in a Text File
+2. Place a combination of links in a Text File
 
 >[!NOTE]
 >To get the file, you can either copy the `main.py` file from the [GitHub](https://github.com/Sunhaloo/PyYu).
 >
->The better way is to simply clone the repository with `git clone https://github.com/Sunhaloo/`
+>The better way is to simply clone the repository with `git clone https://github.com/Sunhaloo/PyYu`
 >Well in this case, you would need to have [Git](https://git-scm.com/)!
 
 
