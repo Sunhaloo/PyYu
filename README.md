@@ -41,16 +41,6 @@ Then follow these steps:
 - Press `1` for *either* of these options ( *Audio Converter* or *Video Downloader* )
 	- Then simply enter your URL with `Ctrl + Shift + V` $\Rightarrow$ Paste **without** any formatting
 
-#### Example Usage
-
-##### Single Link Audio Convert
-
-https://github.com/Sunhaloo/PyYu/tree/main/assets/audio_single_link.mkv
-
-##### Multi-Link Audio Convert
-
-https://github.com/Sunhaloo/PyYu/tree/main/assets/audio_multi_link.mkv
-
 ### Multi-Links
 
 For the multi-links, we are using the `-a` to pass text file to the `yt-dlp` command.
@@ -105,18 +95,6 @@ Similar to above $\uparrow$, navigate to the place where you have the `main.py` 
 - Press `2` for *either* of these options ( *Audio Converter* or *Video Downloader* )
 
 The program should automatically *source* the `yt_urls.txt` file and start to do its thing.
-
-#### Example Usage
-
-##### Single Link Video Download
-
-https://github.com/Sunhaloo/PyYu/tree/main/assets/video_single_link.mkv
-
-##### Multi-Link Video Download
-
-https://github.com/Sunhaloo/PyYu/tree/main/assets/video_multi_link.mkv
-
----
 
 >[!WARNING]
 >The contents of the text file `yt_urls.txt` should look something like this:
