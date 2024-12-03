@@ -67,7 +67,7 @@ Go ahead an use your favourite text editor like VS Code, Sublime Text and others
 cd ~/Desktop
 
 # create a new file
-touch yt_urls.txt
+New-Item yt_urls.txt
 
 # edit that very text file with Notepad
 notepad yt_urls.txt
