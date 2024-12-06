@@ -104,13 +104,12 @@ def check_yt_url(input: str):
 def check_file_size(file_path: str):
     # exception handling
     try:
-        # get the size of the file in question
-        txt_file_size = os.path.getsize(file_path)
+        # then, get the size of the file
+        file_size = os.path.getsize(file_path)
 
-        # output appropriate message based on size of text file
-        # NOTE: this method `.getsize()` return size in bytes
-        if txt_file_size == 0:
-            # meaning that we have nothing in the file
+        # output the appropriate message
+        if file_size == 0:
+            # meaning we have no URLS in the file
             print_dashed_line()
             print("<-- The Text File Does NOT Contains Any URLs... Exiting!!! -->")
             print_dashed_line()
@@ -120,13 +119,9 @@ def check_file_size(file_path: str):
 
     # if file has not been found
     except FileNotFoundError as e:
-        # NOTE: extracting the file name in the `except` part
-        # so that it does not run if the text file has stuff in it ( innit )
-
-        # split the path of file into a list
-        path_split = file_path.split("/")
-        # get the last value of the list
-        file_name = path_split[len(path_split) - 1]
+        # get the name of the text file from file path
+        # NOTE: we get the file name here because it will only run when needed
+        file_name = os.path.basename(file_path)
 
         # output appropriate message
         print(f"\nError: {e}")
