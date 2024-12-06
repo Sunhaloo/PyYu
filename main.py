@@ -24,14 +24,12 @@ def create_folder(user_option: str):
             print("<-- Output Directory / Folder Already Exists! -->")
             print_dashed_line()
 
-        # if the directory / folder does not exists
         else:
             print("<-- Creating Output Folder -->")
             print_dashed_line()
             # create the directory / folder
             os.mkdir(dir_path)
 
-    elif user_option == "video":
         # meaning user wants to download audio
         dir_path = os.path.expanduser("~/Desktop/downloaded_video")
 
