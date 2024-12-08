@@ -331,7 +331,6 @@ def audio_downloader():
             print(f"<-- Converting to '{file_format}' -->\n\n")
 
             # call the function to convert to required audio format
-            # convert_audio_format_single(output_path, user_format, actual_bitrate)
             convert_audio_format(output_path, file_format, actual_bitrate, current_codec)
         
         elif user_option == "2":
