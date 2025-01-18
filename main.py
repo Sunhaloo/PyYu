@@ -7,7 +7,7 @@ import subprocess
 # function to display dashed lines
 def print_dashed_line():
     print()
-    print('-'*50)
+    print("-" * 50)
     print()
 
 
@@ -30,7 +30,8 @@ def create_folder(user_option: str):
             # create the directory / folder
             os.mkdir(dir_path)
 
-        # meaning user wants to download audio
+    if user_option == "video":
+        # meaning user wants to download video
         dir_path = os.path.expanduser("~/Desktop/downloaded_video")
 
         # check if the path exists
@@ -86,7 +87,7 @@ def check_yt_url(input: str):
         elif valid == False:
             print_dashed_line()
             print("<-- Link Entered is NOT Valid... Exiting! -->\n")
-            
+
             # exit the program
             exit(0)
 
@@ -95,7 +96,7 @@ def check_yt_url(input: str):
             print_dashed_line()
             print("<-- Something went wrong... Exiting -->\n")
             print_dashed_line()
-            
+
             # exit the program
             exit(0)
 
@@ -165,10 +166,10 @@ def audio_file_bitrate_checker():
             codec = "libmp3lame"
 
         # perform check on bitrate
-        if (user_bitrate >= 100 and user_bitrate <= 2000):
+        if user_bitrate >= 100 and user_bitrate <= 2000:
             # everything is good... use user's bitrate
             actual_bitrate = str(user_bitrate) + "k"
-        
+
             print_dashed_line()
 
         else:
@@ -195,49 +196,49 @@ def video_file_fps_checker():
     # exception handling
     try:
         # prompt the user to enter file format + FPS
-            user_format = input("Please Select Between 'mp4' or 'webm': ")
-            user_fps = int(input("Please Select Between '60' or '30' FPS: "))
+        user_format = input("Please Select Between 'mp4' or 'webm': ")
+        user_fps = int(input("Please Select Between '60' or '30' FPS: "))
 
-            # evaluate the file format and FPS
-            if user_format == "mp4":
-                # return the file format
-                file_format = "mp4"
+        # evaluate the file format and FPS
+        if user_format == "mp4":
+            # return the file format
+            file_format = "mp4"
 
-            elif user_format == "webm":
-                # return the file format
-                file_format = "webm"
+        elif user_format == "webm":
+            # return the file format
+            file_format = "webm"
 
-            elif user_format == "":
-                # user wants to use default values
-                print_dashed_line()
-                print("<-- Using Default File Format -->")
-                # use "default" file format
-                file_format = "mp4"
+        elif user_format == "":
+            # user wants to use default values
+            print_dashed_line()
+            print("<-- Using Default File Format -->")
+            # use "default" file format
+            file_format = "mp4"
 
-            else:
-                # if the user enters something else
-                print_dashed_line()
-                print("<-- Invalid File Format Entered... Defaulting to MP4 -->")
-                file_format = "mp4"
+        else:
+            # if the user enters something else
+            print_dashed_line()
+            print("<-- Invalid File Format Entered... Defaulting to MP4 -->")
+            file_format = "mp4"
 
-            # perform check on FPS
-            if (user_fps >= 30 and user_fps <= 60):
-                # everything is good... use user's FPS
-                actual_fps = str(user_fps)
+        # perform check on FPS
+        if user_fps >= 30 and user_fps <= 60:
+            # everything is good... use user's FPS
+            actual_fps = str(user_fps)
 
-                print_dashed_line()
+            print_dashed_line()
 
-            else:
-                print_dashed_line()
-                print("<-- Invalid Range For FPS... Defaulting to Max FPS -->")
+        else:
+            print_dashed_line()
+            print("<-- Invalid Range For FPS... Defaulting to Max FPS -->")
 
-                # change to "default" FPS
-                actual_fps = "60"
+            # change to "default" FPS
+            actual_fps = "60"
 
-                print_dashed_line()
+            print_dashed_line()
 
-            # return the file format, codec and bitrate to main program
-            return file_format, actual_fps
+        # return the file format, codec and bitrate to main program
+        return file_format, actual_fps
 
     # if the user does not enter integer values for FPS
     except ValueError as e:
@@ -247,7 +248,9 @@ def video_file_fps_checker():
 
 
 # function to convert between audio formats
-def convert_audio_format(directory_path: str, file_format: str, bitrate: str, codec: str):
+def convert_audio_format(
+    directory_path: str, file_format: str, bitrate: str, codec: str
+):
     # change from the current working directory to where we downloaded the songs
     os.chdir(directory_path)
     # iterate through the whole directory / folder
@@ -257,15 +260,20 @@ def convert_audio_format(directory_path: str, file_format: str, bitrate: str, co
 
         # create the ffmpeg command that will be run from Python
         ffmpeg_cmd = [
-            "ffmpeg", 
-            "-i", input_song, 
-            "-vn", 
-            "-acodec", codec, 
-            "-ab", bitrate, 
-            "-ar", "44100", 
-            "-f", file_format,
+            "ffmpeg",
+            "-i",
+            input_song,
+            "-vn",
+            "-acodec",
+            codec,
+            "-ab",
+            bitrate,
+            "-ar",
+            "44100",
+            "-f",
+            file_format,
             "-y",
-            output_song
+            output_song,
         ]
 
         # run the command from Python
@@ -312,12 +320,7 @@ def audio_downloader():
             print("<-- Starting Downloading Process -->\n\n")
 
             # command to execute from Python in shell
-            yt_dlp_cmd = [
-                    "yt-dlp",
-                    yt_url,
-                    "--format", "m4a",
-                    "-o", output_song_name
-                ]
+            yt_dlp_cmd = ["yt-dlp", yt_url, "--format", "m4a", "-o", output_song_name]
 
             # run the command from Python to the Terminal
             subprocess.run(yt_dlp_cmd)
@@ -327,12 +330,14 @@ def audio_downloader():
 
             # call the function to return the file format, codec and bitrate to main program
             file_format, current_codec, actual_bitrate = audio_file_bitrate_checker()
-            
+
             print(f"<-- Converting to '{file_format}' -->\n\n")
 
             # call the function to convert to required audio format
-            convert_audio_format(output_path, file_format, actual_bitrate, current_codec)
-        
+            convert_audio_format(
+                output_path, file_format, actual_bitrate, current_codec
+            )
+
         elif user_option == "2":
             # user wants to convert YouTube links / videos with Text File
             print_dashed_line()
@@ -364,13 +369,14 @@ def audio_downloader():
                 # if everything is correct start the downloading process
                 # command to execute from Python in shell
                 yt_dlp_cmd = [
-                        "yt-dlp",
-                        "-a", text_file,
-                        "--format",
-                        "m4a",
-                        "-o",
-                        output_song_name
-                    ]
+                    "yt-dlp",
+                    "-a",
+                    text_file,
+                    "--format",
+                    "m4a",
+                    "-o",
+                    output_song_name,
+                ]
 
                 # run the command from Python to the Terminal
                 subprocess.run(yt_dlp_cmd)
@@ -379,12 +385,16 @@ def audio_downloader():
                 print("<-- Starting Conversion Process -->\n\n")
 
                 # call the function to return the codec and bitrate to main program
-                file_format, current_codec, actual_bitrate = audio_file_bitrate_checker()
+                file_format, current_codec, actual_bitrate = (
+                    audio_file_bitrate_checker()
+                )
 
                 print(f"<-- Converting to '{file_format}' -->\n\n")
 
                 # call the function to convert to required audio format
-                convert_audio_format(output_path, file_format, actual_bitrate, current_codec)
+                convert_audio_format(
+                    output_path, file_format, actual_bitrate, current_codec
+                )
 
             else:
                 # user does not have 'yt_urls.txt' file present at `~/Desktop`
@@ -450,17 +460,21 @@ def video_downloader():
             # call the function to return the file format + fps to the main program
             file_format, actual_fps = video_file_fps_checker()
 
-            print(f"<-- Starting Downloading Process ( {file_format} | {actual_fps} ) -->\n\n")
+            print(
+                f"<-- Starting Downloading Process ( {file_format} | {actual_fps} ) -->\n\n"
+            )
 
             # command to execute from Python in shell
             yt_dlp_cmd = [
-                    "yt-dlp",
-                    "-f",
-                    f"bestvideo[ext={file_format}][height<=1080][fps<={actual_fps}]+bestaudio/best[ext={file_format}][height<=1080]",
-                    "--merge-output-format", file_format,
-                    "-o", output_video_name,
-                    yt_url
-                ]
+                "yt-dlp",
+                "-f",
+                f"bestvideo[ext={file_format}][height<=1080][fps<={actual_fps}]+bestaudio/best[ext={file_format}][height<=1080]",
+                "--merge-output-format",
+                file_format,
+                "-o",
+                output_video_name,
+                yt_url,
+            ]
 
             # run the command from Python to the Terminal
             subprocess.run(yt_dlp_cmd)
@@ -494,17 +508,22 @@ def video_downloader():
                 # call the function to return the file format + fps
                 file_format, actual_fps = video_file_fps_checker()
 
-                print(f"<-- Starting Downloading Process ( {file_format} | {actual_fps} ) -->\n\n")
+                print(
+                    f"<-- Starting Downloading Process ( {file_format} | {actual_fps} ) -->\n\n"
+                )
 
                 # command to execute from Python in shell
                 yt_dlp_cmd = [
-                        "yt-dlp",
-                        "-a", text_file,
-                        "-f",
-                        f"bestvideo[ext={file_format}][height<=1080][fps<={actual_fps}]+bestaudio/best[ext={file_format}][height<=1080]",
-                        "--merge-output-format", file_format,
-                        "-o", output_video_name,
-                    ]
+                    "yt-dlp",
+                    "-a",
+                    text_file,
+                    "-f",
+                    f"bestvideo[ext={file_format}][height<=1080][fps<={actual_fps}]+bestaudio/best[ext={file_format}][height<=1080]",
+                    "--merge-output-format",
+                    file_format,
+                    "-o",
+                    output_video_name,
+                ]
 
                 # run the command from Python to the Terminal
                 subprocess.run(yt_dlp_cmd)
@@ -516,7 +535,6 @@ def video_downloader():
             print_dashed_line()
             # exit without errors
             exit(0)
-
 
     # if the user does not enter integer data for bitrate
     except ValueError as e:
@@ -555,7 +573,7 @@ def evaluate_choice(user_choice: str):
     # if user does not select something appropriate
     else:
         print_dashed_line()
-        print('Wrong Option')
+        print("Wrong Option")
         print_dashed_line()
 
 
@@ -574,5 +592,5 @@ def main():
 
 
 # source the main function
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
