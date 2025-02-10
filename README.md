@@ -37,7 +37,7 @@ python main.py
 Then follow these steps:
 
 - Press `1` if you want to **convert** a *single* YouTube video to **Audio**
-- Press `2` if you want to **download** a *single* YouTube video
+- Press `3` if you want to **download** a *single* YouTube video
 - Press `1` for *either* of these options ( *Audio Converter* or *Video Downloader* )
 	- Then simply enter your URL with `Ctrl + Shift + V` $\Rightarrow$ Paste **without** any formatting
 
@@ -90,9 +90,21 @@ python main.py
 
 Similar to above $\uparrow$, navigate to the place where you have the `main.py` and simply run it!
 
-- Press `1` if you want to **convert** YouTube videos to **Audio**
-- Press `2` if you want to **download** YouTube videos
-- Press `2` for *either* of these options ( *Audio Converter* or *Video Downloader* )
+- Press `1` if you want to **convert** YouTube videos to **Audio** *in order of song names* 
+- Press `2` if you want to **convert** YouTube videos to **Audio** *in sequential order of URLS in Text File*  
+- Press `3` if you want to **download** YouTube videos
+- Press `2` for *either* option number `1` or `3` ( *Audio Converter* or *Video Downloader* )
+
+>[!NOTE]
+>Today is the 10/02/2025 and I just added the function whereby you can download in order of number.
+>
+>What do I mean by "*number*"?
+>Well, I like to number my song's file name so that in most software, it will be able to play in **order**.
+>
+>Therefore, when `yt-dlp` will download the song, it will prefix the **first** URL in **text file** with `1. `,
+>the **second** URL will be prefixed with `2. ` and so on.
+>
+>Hence, you are going to have "*song names*" that are in order!
 
 The program should automatically *source* the `yt_urls.txt` file and start to do its thing.
 

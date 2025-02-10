@@ -30,6 +30,21 @@ def create_folder(user_option: str):
             # create the directory / folder
             os.mkdir(dir_path)
 
+    if user_option == "audio_ordered":
+        # meaning user wants to download audio
+        dir_path = os.path.expanduser("~/Desktop/downloaded_audio_ordered")
+
+        # check if the path exists
+        if os.path.exists(dir_path):
+            print("<-- Output Directory / Folder Already Exists! -->")
+            print_dashed_line()
+
+        else:
+            print("<-- Creating Output Folder -->")
+            print_dashed_line()
+            # create the directory / folder
+            os.mkdir(dir_path)
+
     if user_option == "video":
         # meaning user wants to download video
         dir_path = os.path.expanduser("~/Desktop/downloaded_video")
@@ -282,13 +297,13 @@ def convert_audio_format(
         os.remove(input_song)
 
 
-# function to convert download YouTube videos into audio format
-def audio_downloader():
+# function to convert download YouTube videos into audio format ( in file name order )
+def audio_downloader_name_order():
     try:
         # welcome screen for audio convert + display options
-        print("==> Audio Converter Selected <==\n")
+        print("==> Audio Converter Selected<==\n")
         print("Option [1]: Enter Single YouTube Video")
-        print("Option [2]: Use List of URLs from a Text File")
+        print("Option [2]: Use List of URLs from a Text File ( File Name Order )")
         print("Option [3]: Exit")
 
         # prompt the user select an option
@@ -349,10 +364,10 @@ def audio_downloader():
 
             # variable to hold the output directory / path
             output_path = os.path.expanduser("~/Desktop/downloaded_audio/")
-            # variable to hold the output "filename" for the downloaded songs
-            output_song_name = os.path.join(output_path + "%(title)s.%(ext)s")
             # directory / path for our input file
             text_file = os.path.expanduser("~/Desktop/yt_urls.txt")
+            # variable to hold the output "filename" for the downloaded songs
+            output_song_name = os.path.join(output_path + "%(title)s.%(ext)s")
 
             # verify if text file `yt_urls.txt` exists
             if os.path.isfile(text_file) and os.path.exists(text_file):
@@ -420,6 +435,89 @@ def audio_downloader():
     except ValueError as e:
         print(f"\nError: {e}")
         print("Please Enter Integer Data for Bitrate\n")
+
+
+# function to convert download YouTube videos into audio format ( in sequential order )
+def audio_downloader_seq_order():
+    # welcome screen for audio convert + display options
+    print("==> Audio Converter Selected ( Name Order ) <==")
+    print_dashed_line()
+
+    # call the function to create the output directory
+    create_folder("audio_ordered")
+
+    # variable to hold the output directory / path
+    output_path = os.path.expanduser("~/Desktop/downloaded_audio_ordered/")
+    # directory / path for our input file
+    text_file = os.path.expanduser("~/Desktop/yt_urls.txt")
+
+    # verify if text file `yt_urls.txt` exists
+    if os.path.isfile(text_file) and os.path.exists(text_file):
+        # check for contents in the text file
+        check_file_size(text_file)
+
+        # user wants to convert YouTube links / videos with Text File
+        print("<-- Converting URLs from Text File -->")
+        print_dashed_line()
+
+        # call the function to check if URL entered is valid
+        print("<-- Checking if URL Entered is Correct -->")
+        print_dashed_line()
+        check_yt_url(text_file)
+
+        print("<-- Starting Downloading Process -->\n\n")
+
+        # variable that will increment with each download
+        prefix_num = 1
+
+        # open the `yt_urls.txt` file for read
+        with open(text_file, "r") as yt_txt_file:
+            # iterate through each line
+            for urls in yt_txt_file:
+                # remove the 'return' character
+                yt_url = urls.strip()
+
+                # skip any blank lines
+                if not yt_url:
+                    continue
+
+                # variable to hold the output "filename" for the downloaded songs
+                output_song_name = os.path.join(
+                    output_path + f"{prefix_num}. " + "%(title)s.%(ext)s"
+                )
+
+                # if everything is correct start the downloading process
+                # command to execute from Python in shell
+                yt_dlp_cmd = [
+                    "yt-dlp",
+                    yt_url,
+                    "--format",
+                    "m4a",
+                    "-o",
+                    output_song_name,
+                ]
+
+                # run the command from Python to the Terminal
+                subprocess.run(yt_dlp_cmd)
+
+                # increase the variable `prefix_num` by 1
+                prefix_num += 1
+
+        print_dashed_line()
+        print("<-- Starting Conversion Process -->\n\n")
+
+        # call the function to return the codec and bitrate to main program
+        file_format, current_codec, actual_bitrate = audio_file_bitrate_checker()
+
+        print(f"<-- Converting to '{file_format}' -->\n\n")
+
+        # call the function to convert to required audio format
+        convert_audio_format(output_path, file_format, actual_bitrate, current_codec)
+    else:
+        # user does not have 'yt_urls.txt' file present at `~/Desktop`
+        print_dashed_line()
+        print("<-- You have no 'yt_urls.txt' File at Desktop Directory!!! -->")
+        print_dashed_line()
 
 
 # function to download YouTube videos
@@ -547,8 +645,9 @@ def display_options():
     # main welcome screen and display options to user
     print("\nYouTube Video Downloader and Converter\n")
     print("Option [1]: Download Audio")
-    print("Option [2]: Download Video")
-    print("Option [3]: Exit")
+    print("Option [2]: Download Audio ( Text File Only ==> Ordered by Number )")
+    print("Option [3]: Download Video")
+    print("Option [4]: Exit")
     print_dashed_line()
 
 
@@ -556,14 +655,18 @@ def display_options():
 def evaluate_choice(user_choice: str):
     # conditions to evaluate based on user's choice
     if user_choice == "1":
-        # user wants to download in audio format
-        audio_downloader()
+        # user wants to download in audio format ( in random order )
+        audio_downloader_name_order()
 
-    elif user_choice == "2":
+    if user_choice == "2":
+        # user wants to download in audio format ( in sequential order )
+        audio_downloader_seq_order()
+
+    elif user_choice == "3":
         # user wants to download in video format
         video_downloader()
 
-    elif user_choice == "3":
+    elif user_choice == "4":
         # user is closing the program
         print_dashed_line()
         print("Good Bye!")
